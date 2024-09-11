@@ -28,9 +28,9 @@ class CryptoPresenter: AnyPresenter {
     func interactorDidDownloadCrypto(result: Result<[Crypto], Error>) {
         switch result {
         case .success(let cryptos):
-            <#code#>
+            print("success")
         case .failure(let error):
-            <#code#>
+            print("failure")
         }
     }
 }

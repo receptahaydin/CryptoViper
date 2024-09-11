@@ -17,6 +17,7 @@ protocol AnyView {
 
 class CryptoViewController: UIViewController, AnyView, UITableViewDelegate, UITableViewDataSource {
     var presenter: AnyPresenter?
+    var cryptos: [Crypto] = []
     
     private let tableView: UITableView = {
         let table = UITableView()
@@ -27,7 +28,7 @@ class CryptoViewController: UIViewController, AnyView, UITableViewDelegate, UITa
     
     private let messageLabel: UILabel = {
         let label = UILabel()
-        label.isHidden = true
+        label.isHidden = false
         label.text = "Downloading..."
         label.font = UIFont.systemFont(ofSize: 20)
         label.textColor = .label
@@ -37,6 +38,7 @@ class CryptoViewController: UIViewController, AnyView, UITableViewDelegate, UITa
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        view.backgroundColor = .blue
         view.addSubview(tableView)
         view.addSubview(messageLabel)
         tableView.delegate = self
@@ -44,11 +46,13 @@ class CryptoViewController: UIViewController, AnyView, UITableViewDelegate, UITa
     }
     
     override func viewDidLayoutSubviews() {
-        
+        super.viewDidLayoutSubviews()
+        tableView.frame = view.bounds
+        messageLabel.frame = CGRect(x: view.frame.width / 2 - 100, y: view.frame.height / 2 - 25, width: 200, height: 50)
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 10
+        return cryptos.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -56,10 +60,15 @@ class CryptoViewController: UIViewController, AnyView, UITableViewDelegate, UITa
     }
     
     func update(with cryptos: [Crypto]) {
-        <#code#>
+        DispatchQueue.main.async {
+            self.cryptos = cryptos
+            self.messageLabel.isHidden = true
+            self.tableView.reloadData()
+            self.tableView.isHidden = false
+        }
     }
     
     func update(with error: String) {
-        <#code#>
+        //
     }
 }
